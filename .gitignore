@@ -1,0 +1,19 @@
+# macOS
+.DS_Store
+
+# Python
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/.pytest_cache/
+*.pyc
+
+# Generated database
+20260919_GiveCampus_MIT_Hackathon/givecampus_hackmit.sqlite
+*.sqlite
+*.sqlite-journal
+
+# Node / Next.js
+frontend/node_modules/
+frontend/.next/
+frontend/out/
