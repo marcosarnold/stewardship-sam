@@ -38,8 +38,8 @@ def _payload_for(signal):
     )
 
 
-def test_valerie_kaur_thank_golden(constituents, gifts, interactions):
-    signal = next(s for s in stewardship_gap.detect(constituents, gifts, interactions) if s.entity_id == 2669)
+def test_valerie_kaur_thank_golden(context):
+    signal = next(s for s in stewardship_gap.detect(context) if s.entity_id == 2669)
 
     result = explain(_payload_for(signal), client=None)
 
@@ -51,8 +51,8 @@ def test_valerie_kaur_thank_golden(constituents, gifts, interactions):
     assert validate(result.text, _payload_for(signal))
 
 
-def test_kieran_kaur_wait_golden(constituents, interactions):
-    signal = next(s for s in contact_pressure.detect(constituents, interactions) if s.entity_id == 12022)
+def test_kieran_kaur_wait_golden(context):
+    signal = next(s for s in contact_pressure.detect(context) if s.entity_id == 12022)
 
     result = explain(_payload_for(signal), client=None)
 
@@ -64,8 +64,8 @@ def test_kieran_kaur_wait_golden(constituents, interactions):
     assert validate(result.text, _payload_for(signal))
 
 
-def test_nia_chen_follow_up_golden(constituents, interactions, staff):
-    signal = next(s for s in broken_commitment.detect(constituents, interactions, staff) if s.entity_id == 14456)
+def test_nia_chen_follow_up_golden(context):
+    signal = next(s for s in broken_commitment.detect(context) if s.entity_id == 14456)
 
     result = explain(_payload_for(signal), client=None)
 
