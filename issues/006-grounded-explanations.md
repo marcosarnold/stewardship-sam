@@ -14,13 +14,13 @@ Wire it into the Today cards and the "Why Sam surfaced this" card from `issues/0
 
 ## Acceptance criteria
 
-- [ ] Explanations use only the evidence payload; a test injects a fabricated fact into a mocked LLM reply and the validator rejects it and falls back.
-- [ ] Banned phrasings are rejected: "never thanked", "influential", "friends with", and any wealth or capacity inference from a career change (G4, G5, G6).
-- [ ] Missing data is described as missing, for example "No stewardship interaction is recorded".
-- [ ] A prompt-injection test (an interaction note that says to ignore instructions) does not change output.
-- [ ] With no API key or a simulated outage, every card still shows a correct template explanation.
-- [ ] Golden-file tests cover Valerie Kaur (THANK) and any other cast member whose detector has merged.
-- [ ] The service exposes one interface that Ask Sam and Community View reuse.
+- [x] Explanations use only the evidence payload; a test injects a fabricated fact into a mocked LLM reply and the validator rejects it and falls back.
+- [x] Banned phrasings are rejected: "never thanked", "influential", "friends with", and any wealth or capacity inference from a career change (G4, G5, G6).
+- [x] Missing data is described as missing, for example "No stewardship interaction is recorded".
+- [x] A prompt-injection test (an interaction note that says to ignore instructions) does not change output.
+- [x] With no API key or a simulated outage, every card still shows a correct template explanation.
+- [x] Golden-file tests cover Valerie Kaur (THANK) and any other cast member whose detector has merged.
+- [x] The service exposes one interface that Ask Sam and Community View reuse.
 
 ## Blocked by
 

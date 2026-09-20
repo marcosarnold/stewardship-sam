@@ -41,6 +41,8 @@ python3 -m venv .venv
 
 `GET http://localhost:8000/api/today` returns the Today queue as JSON.
 
+Explanations (`explain()`, see `backend/app/explain/`) use OpenAI when `OPENAI_API_KEY` is set in the environment; unset or unreachable, every card falls back to a deterministic template automatically. No key is required to run or test the app.
+
 ### Frontend (Next.js)
 
 ```sh
