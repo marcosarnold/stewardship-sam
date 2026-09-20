@@ -47,6 +47,8 @@ Dismissing a Today item (`POST /api/today/{id}/dismiss`) is persisted to `backen
 
 `GET /api/relationships/{id}/timeline` returns that person's gifts, interactions, events attended, career changes, and opportunities, newest first, with `types` and `page` query params.
 
+`GET /api/communities` and `GET /api/communities/{id}/members` expose the NetworkX relationship graph's communities (an activity with at least `COMMUNITY_MIN_MEMBERS` eligible members). The graph is built once at startup and cached; an edge is shared institutional context, such as a common activity, never a direct social relationship or friendship (G5).
+
 ### Frontend (Next.js)
 
 ```sh

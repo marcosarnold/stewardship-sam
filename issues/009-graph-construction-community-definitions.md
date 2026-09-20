@@ -14,12 +14,12 @@ Build the graph once at startup and cache it.
 
 ## Acceptance criteria
 
-- [ ] Node and edge counts match the source CSV row counts (tests compare them per type).
-- [ ] 79 communities are eligible, and Alumni Board has 180 eligible members (Appendix B).
-- [ ] Members and communities exclude organizations and deceased constituents.
-- [ ] The members endpoint paginates and returns ids that open the Relationship View.
-- [ ] Cold graph build takes under 30 seconds and is cached afterward.
-- [ ] The Communities page and API docs state that edges are shared context, not friendship (G5).
+- [x] Node and edge counts match the source CSV row counts (tests compare them per type).
+- [x] 79 communities are eligible, and Alumni Board has 180 eligible members (Appendix B).
+- [x] Members and communities exclude organizations and deceased constituents.
+- [x] The members endpoint paginates and returns ids that open the Relationship View.
+- [x] Cold graph build takes under 30 seconds and is cached afterward.
+- [x] The Communities page and API docs state that edges are shared context, not friendship (G5).
 
 ## Blocked by
 
