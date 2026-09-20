@@ -65,6 +65,7 @@ def build_today_queue(
                     "entity_id": signal.entity_id,
                     "entity_name": signal.entity_name,
                     "action": signal.action,
+                    "evidence": signal.evidence,
                     "reason_code": decision.reason_code,
                     "reason": decision.reason,
                 }
