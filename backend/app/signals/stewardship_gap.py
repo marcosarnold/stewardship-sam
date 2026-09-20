@@ -12,6 +12,7 @@ from datetime import timedelta
 import pandas as pd
 
 from app.config import AS_OF_DATE, RECENT_GIFT_WINDOW_DAYS, STEWARDSHIP_PURPOSES
+from app.formatting import format_amount, format_date
 from app.models import Signal
 from app.normalize import population, received_gifts
 
@@ -19,16 +20,6 @@ SIGNAL_ID = "SIG1"
 ACTION = "THANK"
 
 _WINDOW_START = AS_OF_DATE - timedelta(days=RECENT_GIFT_WINDOW_DAYS)
-
-
-def _format_amount(amount: float) -> str:
-    if float(amount).is_integer():
-        return f"${amount:,.0f}"
-    return f"${amount:,.2f}"
-
-
-def _format_date(value) -> str:
-    return f"{value:%b} {value.day}, {value:%Y}"
 
 
 def _channel_hint(constituent: pd.Series) -> str | None:
@@ -78,7 +69,7 @@ def detect(
                 signal_id=SIGNAL_ID,
                 action=ACTION,
                 evidence=[
-                    f"{_format_amount(gift['amount'])} gift on {_format_date(gift_date)}",
+                    f"{format_amount(gift['amount'])} gift on {format_date(gift_date)}",
                     "No stewardship interaction is recorded since the gift",
                 ],
                 urgency_date=gift_date.isoformat(),
