@@ -116,3 +116,27 @@ export type Timeline = {
   total: number;
   has_more: boolean;
 };
+
+export type Community = {
+  id: string;
+  name: string;
+  type: "activity";
+  member_count: number;
+  eligible: boolean;
+};
+
+export type CommunityMember = {
+  entity_id: number;
+  entity_name: string;
+};
+
+export type CommunityMembers = {
+  community_id: string;
+  community_name: string;
+  members: CommunityMember[];
+  page: number;
+  page_size: number;
+  total: number;
+  has_more: boolean;
+  note: string;
+};

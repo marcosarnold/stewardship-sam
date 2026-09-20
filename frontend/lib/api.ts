@@ -1,4 +1,11 @@
-import type { RelationshipPage, Timeline, TimelineEntryType, TodayResponse } from "./types";
+import type {
+  Community,
+  CommunityMembers,
+  RelationshipPage,
+  Timeline,
+  TimelineEntryType,
+  TodayResponse,
+} from "./types";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
 
@@ -61,6 +68,31 @@ export async function fetchRelationship(entityId: string): Promise<RelationshipP
   }
   if (!response.ok) {
     throw new Error(`GET /api/relationships/${entityId} failed with status ${response.status}`);
+  }
+  return response.json();
+}
+
+export async function fetchCommunities(): Promise<Community[]> {
+  const response = await fetch(`${API_BASE_URL}/api/communities`, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`GET /api/communities failed with status ${response.status}`);
+  }
+  const body = await response.json();
+  return body.communities;
+}
+
+export async function fetchCommunityMembers(
+  communityId: string,
+  page: number = 1
+): Promise<CommunityMembers | null> {
+  const response = await fetch(`${API_BASE_URL}/api/communities/${communityId}/members?page=${page}`, {
+    cache: "no-store",
+  });
+  if (response.status === 404) {
+    return null;
+  }
+  if (!response.ok) {
+    throw new Error(`GET /api/communities/${communityId}/members failed with status ${response.status}`);
   }
   return response.json();
 }
