@@ -45,6 +45,8 @@ Explanations (`explain()`, see `backend/app/explain/`) use OpenAI when `OPENAI_A
 
 Dismissing a Today item (`POST /api/today/{id}/dismiss`) is persisted to `backend/var/dismissals.json` (gitignored); delete that file to clear all dismissals.
 
+`GET /api/relationships/{id}/timeline` returns that person's gifts, interactions, events attended, career changes, and opportunities, newest first, with `types` and `page` query params.
+
 ### Frontend (Next.js)
 
 ```sh

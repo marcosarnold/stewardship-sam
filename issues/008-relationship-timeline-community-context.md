@@ -12,12 +12,12 @@ Complete the Relationship View from `issues/005-relationship-view-evidence-card.
 
 ## Acceptance criteria
 
-- [ ] Valerie Kaur's timeline shows the Feb 4, 2026 gift, and the stretch after it is described as "No interactions are recorded".
-- [ ] Isaac Chen's timeline shows the Mar 18 reply, the May 15 meeting, and the June and July contacts in order.
-- [ ] Type filters work, and empty types say "None recorded" (G4).
-- [ ] Career-change entries use neutral wording ("Started as ... at ...") and never mention wealth or capacity (G6).
-- [ ] Community context lists each membership and links to the community once `issues/009-graph-construction-community-definitions.md` exists.
-- [ ] The busiest timeline in the dataset loads in under 1 second and does not render every row at once.
+- [x] Valerie Kaur's timeline shows the Feb 4, 2026 gift, and the stretch after it is described as "No interactions are recorded".
+- [x] Isaac Chen's timeline shows the Mar 18 reply, the May 15 meeting, and the June and July contacts in order.
+- [x] Type filters work, and empty types say "None recorded" (G4).
+- [x] Career-change entries use neutral wording ("Started as ... at ...") and never mention wealth or capacity (G6).
+- [x] Community context lists each membership and links to the community once `issues/009-graph-construction-community-definitions.md` exists.
+- [x] The busiest timeline in the dataset loads in under 1 second and does not render every row at once.
 
 ## Blocked by
 
