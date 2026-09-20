@@ -13,7 +13,8 @@ from app.explain import explain
 from app.explain.from_signal import payload_from_signal_dict
 from app.followups import build_followups
 from app.priority_queue import build_queue, summarize_counts, summarize_held_back
-from app.relationships import build_relationship
+from app.relationships import build_relationship, find_constituent
+from app.timeline import TIMELINE_TYPES, build_timeline
 
 app = FastAPI(title="Stewardship Sam API")
 
@@ -93,8 +94,9 @@ def get_relationship(entity_id: int):
     context = build_context()
     degrees = load_table("degrees")
     activities = load_table("activities")
+    affiliations = load_table("affiliations")
 
-    relationship = build_relationship(entity_id, context, degrees, activities)
+    relationship = build_relationship(entity_id, context, degrees, activities, affiliations)
     if relationship is None:
         raise HTTPException(
             status_code=404,
@@ -103,3 +105,29 @@ def get_relationship(entity_id: int):
 
     relationship["signals"] = [_with_explanation(s) for s in relationship["signals"]]
     return relationship
+
+
+@app.get("/api/relationships/{entity_id}/timeline")
+def get_relationship_timeline(entity_id: int, types: str | None = None, page: int = 1):
+    constituents = load_table("constituents")
+    if find_constituent(entity_id, constituents) is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No relationship record for id {entity_id}: unknown, not an individual, or deceased.",
+        )
+
+    requested_types = None
+    if types is not None:
+        requested_types = [t for t in types.split(",") if t in TIMELINE_TYPES]
+
+    return build_timeline(
+        entity_id,
+        gifts=load_table("gifts"),
+        interactions=load_table("interactions"),
+        events=load_table("events"),
+        event_attendance=load_table("event_attendance"),
+        career_history=load_table("career_history"),
+        opportunities=load_table("opportunities"),
+        types=requested_types,
+        page=page,
+    )

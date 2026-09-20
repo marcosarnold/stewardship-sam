@@ -13,6 +13,7 @@ import pandas as pd
 
 from app.context import Context
 from app.formatting import format_date
+from app.normalize import population
 from app.priority_queue import evaluate_signals, merge_per_person
 from app.signals import broken_commitment
 from app.staff_lookup import assigned_officer_name, officer_names
@@ -58,6 +59,47 @@ def _activities(entity_id: int, activities: pd.DataFrame) -> list[str]:
     return sorted(set(rows["activity_name"].tolist()))
 
 
+def _community_context(
+    entity_id: int,
+    activities: pd.DataFrame,
+    affiliations: pd.DataFrame,
+    constituents: pd.DataFrame,
+) -> list[dict]:
+    """Each of this person's activity and affiliation memberships, with a
+    member count across the population (individuals, not deceased) who
+    share that same membership. Links to a community page arrive once
+    issues/009-graph-construction-community-definitions.md exists.
+    """
+    pop_ids = set(population(constituents)["id"])
+
+    pop_activities = activities[activities["constituent_id"].isin(pop_ids)]
+    activity_counts = pop_activities.groupby("activity_name")["constituent_id"].nunique()
+
+    pop_affiliations = affiliations[affiliations["constituent_id"].isin(pop_ids)]
+    affiliation_counts = pop_affiliations.groupby("raw_affiliation_value")["constituent_id"].nunique()
+
+    memberships = []
+    for _, row in activities[activities["constituent_id"] == entity_id].iterrows():
+        memberships.append(
+            {
+                "type": "activity",
+                "name": row["activity_name"],
+                "role": _clean(row["role"]),
+                "member_count": int(activity_counts.get(row["activity_name"], 0)),
+            }
+        )
+    for _, row in affiliations[affiliations["constituent_id"] == entity_id].iterrows():
+        memberships.append(
+            {
+                "type": "affiliation",
+                "name": row["raw_affiliation_value"],
+                "role": None,
+                "member_count": int(affiliation_counts.get(row["raw_affiliation_value"], 0)),
+            }
+        )
+    return memberships
+
+
 def _kept_commitments(entity_id: int, interactions: pd.DataFrame) -> list[dict]:
     due = broken_commitment.compute_due_commitments(interactions)
     resolved = [row for row in due if row["constituent_id"] == entity_id and row["resolved"]]
@@ -90,6 +132,7 @@ def build_relationship(
     context: Context,
     degrees: pd.DataFrame,
     activities: pd.DataFrame,
+    affiliations: pd.DataFrame,
 ) -> dict | None:
     constituent = find_constituent(entity_id, context.constituents)
     if constituent is None:
@@ -134,4 +177,5 @@ def build_relationship(
         "recommended_action": recommended_action,
         "signals": why,
         "kept_commitments": _kept_commitments(entity_id, context.interactions),
+        "community_context": _community_context(entity_id, activities, affiliations, context.constituents),
     }
