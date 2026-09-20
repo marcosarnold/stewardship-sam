@@ -5,6 +5,9 @@ recorded. When a person has multiple recent gifts, the earliest one
 establishes when continuous stewardship coverage should have started;
 any stewardship touch on or after that date resolves the gap for all of
 their recent gifts.
+
+Returns raw signals only -- contact policy (channel, suppression) is
+applied centrally by app.priority_queue, not here.
 """
 
 from datetime import timedelta
@@ -12,9 +15,11 @@ from datetime import timedelta
 import pandas as pd
 
 from app.config import AS_OF_DATE, RECENT_GIFT_WINDOW_DAYS, STEWARDSHIP_PURPOSES
+from app.context import Context
 from app.formatting import format_amount, format_date
 from app.models import Signal
 from app.normalize import population, received_gifts
+from app.registry import register
 
 SIGNAL_ID = "SIG1"
 ACTION = "THANK"
@@ -22,15 +27,7 @@ ACTION = "THANK"
 _WINDOW_START = AS_OF_DATE - timedelta(days=RECENT_GIFT_WINDOW_DAYS)
 
 
-def _channel_hint(constituent: pd.Series) -> str | None:
-    if constituent["email_status"] == "deliverable":
-        return "email"
-    if constituent["phone_status"] == "available":
-        return "phone"
-    return None
-
-
-def detect(
+def _detect(
     constituents: pd.DataFrame,
     gifts: pd.DataFrame,
     interactions: pd.DataFrame,
@@ -74,8 +71,12 @@ def detect(
                 ],
                 urgency_date=gift_date.isoformat(),
                 urgency_amount=float(gift["amount"]),
-                channel_hint=_channel_hint(constituent),
             )
         )
 
     return signals
+
+
+@register
+def detect(context: Context) -> list[Signal]:
+    return _detect(context.constituents, context.gifts, context.interactions)

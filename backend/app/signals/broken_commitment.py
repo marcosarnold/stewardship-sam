@@ -12,9 +12,11 @@ import pandas as pd
 
 from app.channel_resolution import channel_note, resolve_channel
 from app.config import AS_OF_DATE
+from app.context import Context
 from app.formatting import format_date
 from app.models import Signal
 from app.normalize import population
+from app.registry import register
 from app.staff_lookup import assigned_officer_name, officer_names
 
 SIGNAL_ID = "SIG2"
@@ -108,18 +110,8 @@ def _contact_facts(constituent: pd.Series) -> dict:
     }
 
 
-def build_signal_and_channel_note(
-    row: dict, constituent: pd.Series, officer_name: str | None
-) -> tuple[Signal, str | None]:
-    """The FOLLOW UP Signal for one unresolved due commitment, plus an
-    explanatory note about any non-chosen channel (e.g. "Email status is
-    inactive; phone is the allowed channel"), even when that channel
-    never blocked the choice.
-    """
-    decision, rejected = resolve_channel(_contact_facts(constituent), ACTION)
-    notes = channel_note(decision.allowed_channel, rejected) if decision.allowed_channel else []
-
-    signal = Signal(
+def _base_signal(row: dict, constituent: pd.Series, officer_name: str | None) -> Signal:
+    return Signal(
         entity_type="constituent",
         entity_id=row["constituent_id"],
         entity_name=constituent["preferred_name"],
@@ -132,13 +124,31 @@ def build_signal_and_channel_note(
         ][:3],
         urgency_date=row["follow_up_date"].isoformat(),
         urgency_days=row["days_overdue"],
-        channel_hint=decision.allowed_channel,
         assigned_officer=officer_name,
     )
+
+
+def build_signal_and_channel_note(
+    row: dict, constituent: pd.Series, officer_name: str | None
+) -> tuple[Signal, str | None]:
+    """The FOLLOW UP Signal for one unresolved due commitment, plus an
+    explanatory note about any non-chosen channel (e.g. "Email status is
+    inactive; phone is the allowed channel"), even when that channel
+    never blocked the choice. Used by GET /api/followups, which is
+    independent of the Today registry/priority queue.
+    """
+    decision, rejected = resolve_channel(_contact_facts(constituent), ACTION)
+    notes = channel_note(decision.allowed_channel, rejected) if decision.allowed_channel else []
+
+    signal = _base_signal(row, constituent, officer_name)
+    signal.channel_hint = decision.allowed_channel
     return signal, (notes[0] if notes else None)
 
 
-def detect(constituents: pd.DataFrame, interactions: pd.DataFrame, staff: pd.DataFrame) -> list[Signal]:
+def _detect(constituents: pd.DataFrame, interactions: pd.DataFrame, staff: pd.DataFrame) -> list[Signal]:
+    """Raw signals, no channel -- app.priority_queue resolves the channel
+    centrally, like every other registered signal type.
+    """
     pop = population(constituents).set_index("id", drop=False)
     names = officer_names(staff)
 
@@ -149,7 +159,11 @@ def detect(constituents: pd.DataFrame, interactions: pd.DataFrame, staff: pd.Dat
     for row in unresolved:
         constituent = pop.loc[row["constituent_id"]]
         officer_name = assigned_officer_name(constituent["assigned_staff_id"], names)
-        signal, _ = build_signal_and_channel_note(row, constituent, officer_name)
-        signals.append(signal)
+        signals.append(_base_signal(row, constituent, officer_name))
 
     return signals
+
+
+@register
+def detect(context: Context) -> list[Signal]:
+    return _detect(context.constituents, context.interactions, context.staff)

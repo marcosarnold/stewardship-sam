@@ -1,14 +1,14 @@
 from app.signals import contact_pressure, stewardship_gap
 
 
-def test_sig5_matches_appendix_b_count(constituents, interactions):
-    signals = contact_pressure.detect(constituents, interactions)
+def test_sig5_matches_appendix_b_count(context):
+    signals = contact_pressure.detect(context)
 
     assert len(signals) == 8
 
 
-def test_kieran_kaur_surfaces_as_wait_with_expected_evidence(constituents, interactions):
-    signals = contact_pressure.detect(constituents, interactions)
+def test_kieran_kaur_surfaces_as_wait_with_expected_evidence(context):
+    signals = contact_pressure.detect(context)
     by_id = {s.entity_id: s for s in signals}
 
     kieran = by_id[12022]
@@ -18,7 +18,7 @@ def test_kieran_kaur_surfaces_as_wait_with_expected_evidence(constituents, inter
     assert kieran.evidence[1] == "Most recent: Aug 19, 2026"
 
 
-def test_kieran_kaur_has_no_thank_signal(constituents, gifts, interactions):
-    thank_signals = stewardship_gap.detect(constituents, gifts, interactions)
+def test_kieran_kaur_has_no_thank_signal(context):
+    thank_signals = stewardship_gap.detect(context)
 
     assert all(s.entity_id != 12022 for s in thank_signals)

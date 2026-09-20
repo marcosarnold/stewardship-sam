@@ -1,6 +1,15 @@
 import pytest
 
+from app.context import Context
 from app.db import load_table
+from app.dismissals import clear_all
+
+
+@pytest.fixture(autouse=True)
+def _reset_dismissals():
+    clear_all()
+    yield
+    clear_all()
 
 
 @pytest.fixture(scope="session")
@@ -36,3 +45,14 @@ def degrees():
 @pytest.fixture(scope="session")
 def activities():
     return load_table("activities")
+
+
+@pytest.fixture(scope="session")
+def context(constituents, gifts, interactions, staff, opportunities):
+    return Context(
+        constituents=constituents,
+        gifts=gifts,
+        interactions=interactions,
+        staff=staff,
+        opportunities=opportunities,
+    )

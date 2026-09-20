@@ -88,8 +88,8 @@ def test_matches_appendix_b_40_due_39_resolved_1_unresolved(interactions):
     assert unresolved[0]["constituent_id"] == 14456
 
 
-def test_nia_chen_surfaces_as_follow_up_with_expected_evidence(constituents, interactions, staff):
-    signals = broken_commitment.detect(constituents, interactions, staff)
+def test_nia_chen_surfaces_as_follow_up_with_expected_evidence(context):
+    signals = broken_commitment.detect(context)
 
     assert len(signals) == 1
     nia = signals[0]
@@ -101,7 +101,8 @@ def test_nia_chen_surfaces_as_follow_up_with_expected_evidence(constituents, int
         "No response on a Mar 15, 2026 solicitation call",
     ]
     assert nia.assigned_officer == "Morgan Ellis"
-    assert nia.channel_hint == "phone"
+    # Channel is resolved centrally by app.priority_queue, not here.
+    assert nia.channel_hint is None
 
 
 def test_nia_chen_channel_note_explains_inactive_email(constituents, interactions, staff):
@@ -116,14 +117,14 @@ def test_nia_chen_channel_note_explains_inactive_email(constituents, interaction
     assert note == "Email status is inactive; phone is the allowed channel"
 
 
-def test_isaac_chen_does_not_surface_as_follow_up(constituents, interactions, staff):
-    signals = broken_commitment.detect(constituents, interactions, staff)
+def test_isaac_chen_does_not_surface_as_follow_up(context):
+    signals = broken_commitment.detect(context)
 
     assert all(s.entity_id != 2548 for s in signals)
 
 
-def test_no_evidence_says_broken_or_missed(constituents, interactions, staff):
-    signals = broken_commitment.detect(constituents, interactions, staff)
+def test_no_evidence_says_broken_or_missed(context):
+    signals = broken_commitment.detect(context)
 
     forbidden = ("broken", "missed")
     for signal in signals:
