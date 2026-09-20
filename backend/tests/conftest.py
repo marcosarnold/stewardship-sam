@@ -16,3 +16,8 @@ def gifts():
 @pytest.fixture(scope="session")
 def interactions():
     return load_table("interactions")
+
+
+@pytest.fixture(scope="session")
+def staff():
+    return load_table("staff")
