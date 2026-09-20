@@ -43,6 +43,8 @@ python3 -m venv .venv
 
 Explanations (`explain()`, see `backend/app/explain/`) use OpenAI when `OPENAI_API_KEY` is set in the environment; unset or unreachable, every card falls back to a deterministic template automatically. No key is required to run or test the app.
 
+Dismissing a Today item (`POST /api/today/{id}/dismiss`) is persisted to `backend/var/dismissals.json` (gitignored); delete that file to clear all dismissals.
+
 ### Frontend (Next.js)
 
 ```sh

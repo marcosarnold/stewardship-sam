@@ -14,15 +14,15 @@ The queue merges signals per constituent into one item with a primary action and
 
 ## Acceptance criteria
 
-- [ ] Adding a dummy detector to the registry in a test changes the queue without editing ranking code.
-- [ ] Valerie Kaur appears once, with THANK as the primary action and the neglected-relationship evidence attached.
-- [ ] Kieran Kaur appears once as WAIT, and none of his other signals appear as actions.
-- [ ] Nia Chen's FOLLOW UP ranks above every THANK, ASSIGN, and RECONNECT item (SIG2: broken commitments rank highly).
-- [ ] Header counts match the items shown, and every item links to its Relationship View.
-- [ ] Dismissing an item hides it, survives a reload, can be undone, and does not delete the underlying signal.
-- [ ] No numeric score appears in the UI or in API fields meant for display; internal sort keys are allowed.
-- [ ] Ranking is deterministic, with tie-breakers, and covered by a fixture test.
-- [ ] Every signal type passes through `evaluate_contact` before ranking; suppressed items go to "Held back today".
+- [x] Adding a dummy detector to the registry in a test changes the queue without editing ranking code.
+- [x] Valerie Kaur appears once, with THANK as the primary action and the neglected-relationship evidence attached.
+- [x] Kieran Kaur appears once as WAIT, and none of his other signals appear as actions.
+- [x] Nia Chen's FOLLOW UP ranks above every THANK, ASSIGN, and RECONNECT item (SIG2: broken commitments rank highly).
+- [x] Header counts match the items shown, and every item links to its Relationship View.
+- [x] Dismissing an item hides it, survives a reload, can be undone, and does not delete the underlying signal.
+- [x] No numeric score appears in the UI or in API fields meant for display; internal sort keys are allowed.
+- [x] Ranking is deterministic, with tie-breakers, and covered by a fixture test.
+- [x] Every signal type passes through `evaluate_contact` before ranking; suppressed items go to "Held back today".
 
 ## Blocked by
 

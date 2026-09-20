@@ -20,3 +20,7 @@ frontend/out/
 
 # Local env overrides
 .env.local
+backend/.env
+
+# Runtime state (dismissals)
+backend/var/
