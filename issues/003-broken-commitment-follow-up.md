@@ -14,13 +14,13 @@ The rule: a commitment is resolved when a later interaction with the same consti
 
 ## Acceptance criteria
 
-- [ ] Exactly 1 due commitment is unresolved: Nia Chen (14456). Evidence: "Follow-up was due May 1, 2026", "No subsequent follow-up is recorded", and the prior outcome (no_response on a Mar 15 solicitation call).
-- [ ] Nia's evidence shows her assigned officer (G3) and that a call is the allowed channel (email is inactive).
-- [ ] Isaac Chen (2548) does NOT appear as FOLLOW UP. `include_resolved=true` shows his May 15 commitment as resolved by the May 15 meeting.
-- [ ] Follow-up dates after `AS_OF_DATE` (such as Isaac's 2026-12-01) are classified as upcoming, never overdue.
-- [ ] Boundary tests: an interaction on the follow-up date resolves it; an interaction the day before does not.
-- [ ] A documented hook exists for an explicit completed/cancelled indicator and currently reports "not available in this dataset".
-- [ ] Nothing in the UI or API says a promise was "broken" or "missed" as fact; it says what is and is not recorded (G4).
+- [x] Exactly 1 due commitment is unresolved: Nia Chen (14456). Evidence: "Follow-up was due May 1, 2026", "No subsequent follow-up is recorded", and the prior outcome (no_response on a Mar 15 solicitation call).
+- [x] Nia's evidence shows her assigned officer (G3) and that a call is the allowed channel (email is inactive).
+- [x] Isaac Chen (2548) does NOT appear as FOLLOW UP. `include_resolved=true` shows his May 15 commitment as resolved by the May 15 meeting.
+- [x] Follow-up dates after `AS_OF_DATE` (such as Isaac's 2026-12-01) are classified as upcoming, never overdue.
+- [x] Boundary tests: an interaction on the follow-up date resolves it; an interaction the day before does not.
+- [x] A documented hook exists for an explicit completed/cancelled indicator and currently reports "not available in this dataset".
+- [x] Nothing in the UI or API says a promise was "broken" or "missed" as fact; it says what is and is not recorded (G4).
 
 ## Blocked by
 
