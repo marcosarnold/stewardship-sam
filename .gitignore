@@ -17,3 +17,6 @@ backend/.pytest_cache/
 frontend/node_modules/
 frontend/.next/
 frontend/out/
+
+# Local env overrides
+.env.local
