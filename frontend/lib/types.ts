@@ -1,15 +1,25 @@
-export type Signal = {
+export type SupportingSignal = {
+  action: string;
+  evidence: string[];
+};
+
+// A merged Today card: one person, one primary action, ranked by
+// app/priority_queue.py (PRD Section 10). Not the same shape as a raw
+// Signal -- see RelationshipSignal for that (the unmerged "why" list).
+export type QueueItem = {
   entity_type: string;
   entity_id: number;
   entity_name: string;
-  signal_id: string;
   action: string;
   evidence: string[];
-  urgency_date: string | null;
-  urgency_amount: number | null;
-  urgency_days: number | null;
   channel_hint: string | null;
   assigned_officer: string | null;
+  ranking_factor: string;
+  supporting_signals: SupportingSignal[];
+  dismissed: boolean;
+  dismiss_reason: string | null;
+  explanation: string;
+  explanation_source: "llm" | "template";
 };
 
 export type HeldBackItem = {
@@ -32,7 +42,12 @@ export type HeldBack = {
 };
 
 export type TodayResponse = {
-  signals: Signal[];
+  signals: QueueItem[];
+  total_count: number;
+  dismissed: QueueItem[];
+  counts: Record<string, number>;
+  cap: number;
+  show_all: boolean;
   held_back: HeldBack;
 };
 

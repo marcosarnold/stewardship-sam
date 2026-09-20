@@ -1,6 +1,9 @@
+"use client";
+
 import Link from "next/link";
-import { fetchToday } from "@/lib/api";
-import type { HeldBack, Signal } from "@/lib/types";
+import { useEffect, useState } from "react";
+import { dismissToday, fetchToday, restoreToday } from "@/lib/api";
+import type { HeldBack, QueueItem as QueueItemType, TodayResponse } from "@/lib/types";
 
 const REASON_LABELS: Record<string, string> = {
   recent_contact: "Recent contact already suppresses this",
@@ -15,6 +18,14 @@ const REASON_LABELS: Record<string, string> = {
   contact_pressure: "Recent contact pressure",
 };
 
+const ACTION_GROUP_LABELS: Record<string, string> = {
+  "FOLLOW UP": "Follow-ups",
+  THANK: "Stewardship",
+  WAIT: "Restraint",
+  RECONNECT: "Reconnect",
+  ASSIGN: "Assign",
+};
+
 function reasonLabel(reasonCode: string): string {
   return REASON_LABELS[reasonCode] ?? reasonCode;
 }
@@ -23,25 +34,96 @@ function channelLabel(channelHint: string | null): string {
   return channelHint ?? "Not on file";
 }
 
-function QueueItem({ signal }: { signal: Signal }) {
+function HeaderSummary({ counts, total }: { counts: Record<string, number>; total: number }) {
+  const parts = Object.entries(counts)
+    .filter(([, count]) => count > 0)
+    .map(([action, count]) => `${count} ${ACTION_GROUP_LABELS[action] ?? action}`);
+
+  return (
+    <div className="today-header">
+      <h1>Stewardship Sam</h1>
+      <p>Where should I spend Tuesday?</p>
+      <p className="queue-summary">
+        {total} relationship{total === 1 ? "" : "s"} need attention today.
+      </p>
+      {parts.length > 0 && <p className="queue-summary">{parts.join(" | ")}</p>}
+    </div>
+  );
+}
+
+function QueueItemCard({
+  item,
+  onDismiss,
+}: {
+  item: QueueItemType;
+  onDismiss: (entityId: number) => void;
+}) {
   return (
     <li className="queue-item">
       <div className="queue-item-header">
-        <span className="entity-name">{signal.entity_name}</span>
-        <span className="action-pill">{signal.action}</span>
+        <span className="entity-name">{item.entity_name}</span>
+        <span className="action-pill">{item.action}</span>
       </div>
+      <p className="ranking-factor">{item.ranking_factor}</p>
       <ul className="evidence-list">
-        {signal.evidence.map((line) => (
+        {item.evidence.map((line) => (
           <li key={line}>{line}</li>
         ))}
       </ul>
-      {signal.action !== "WAIT" && (
-        <p className="channel-hint">Allowed channel: {channelLabel(signal.channel_hint)}</p>
+      {item.action !== "WAIT" && (
+        <p className="channel-hint">Allowed channel: {channelLabel(item.channel_hint)}</p>
       )}
-      <Link className="view-link" href={`/relationship/${signal.entity_id}`}>
-        View relationship
-      </Link>
+      {item.supporting_signals.length > 0 && (
+        <div className="supporting-signals">
+          {item.supporting_signals.map((s) => (
+            <p key={s.action} className="supporting-signal">
+              Also: <span className="action-pill action-pill-small">{s.action}</span>{" "}
+              {s.evidence.join("; ")}
+            </p>
+          ))}
+        </div>
+      )}
+      <div className="queue-item-actions">
+        <Link className="view-link" href={`/relationship/${item.entity_id}`}>
+          View relationship
+        </Link>
+        <button className="dismiss-button" onClick={() => onDismiss(item.entity_id)}>
+          Dismiss
+        </button>
+      </div>
     </li>
+  );
+}
+
+function DismissedSection({
+  items,
+  onRestore,
+}: {
+  items: QueueItemType[];
+  onRestore: (entityId: number) => void;
+}) {
+  if (items.length === 0) {
+    return null;
+  }
+
+  return (
+    <details className="held-back">
+      <summary>Dismissed ({items.length})</summary>
+      <ul className="held-back-list">
+        {items.map((item) => (
+          <li key={item.entity_id}>
+            <Link href={`/relationship/${item.entity_id}`}>{item.entity_name}</Link>
+            <span className="held-back-reason">
+              {" "}
+              &mdash; {item.dismiss_reason ?? "no reason given"}
+            </span>
+            <button className="restore-button" onClick={() => onRestore(item.entity_id)}>
+              Undo
+            </button>
+          </li>
+        ))}
+      </ul>
+    </details>
   );
 }
 
@@ -55,9 +137,7 @@ function HeldBackSection({ heldBack }: { heldBack: HeldBack }) {
       <summary>
         Held back today ({heldBack.items.length})
         <span className="held-back-reasons">
-          {heldBack.reasons
-            .map((r) => `${reasonLabel(r.reason_code)}: ${r.count}`)
-            .join(" · ")}
+          {heldBack.reasons.map((r) => `${reasonLabel(r.reason_code)}: ${r.count}`).join(" · ")}
         </span>
       </summary>
       <p className="held-back-caveat">
@@ -76,46 +156,86 @@ function HeldBackSection({ heldBack }: { heldBack: HeldBack }) {
   );
 }
 
-export default async function TodayPage() {
-  let signals: Signal[] = [];
-  let heldBack: HeldBack = { reasons: [], items: [] };
-  let error: string | null = null;
+export default function TodayPage() {
+  const [data, setData] = useState<TodayResponse | null>(null);
+  const [showAll, setShowAll] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  try {
-    const data = await fetchToday();
-    signals = data.signals;
-    heldBack = data.held_back;
-  } catch {
-    error = "Could not reach the Stewardship Sam API. Is the backend running?";
+  const load = (nextShowAll: boolean) => {
+    fetchToday(nextShowAll)
+      .then((response) => {
+        setData(response);
+        setError(null);
+      })
+      .catch(() => {
+        setError("Could not reach the Stewardship Sam API. Is the backend running?");
+      });
+  };
+
+  useEffect(() => {
+    load(showAll);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showAll]);
+
+  const handleDismiss = (entityId: number) => {
+    dismissToday(entityId, null).then(() => load(showAll));
+  };
+
+  const handleRestore = (entityId: number) => {
+    restoreToday(entityId).then(() => load(showAll));
+  };
+
+  if (error) {
+    return (
+      <main>
+        <div className="today-header">
+          <h1>Stewardship Sam</h1>
+          <p>Where should I spend Tuesday?</p>
+        </div>
+        <p className="error-state">{error}</p>
+      </main>
+    );
+  }
+
+  if (data === null) {
+    return (
+      <main>
+        <div className="today-header">
+          <h1>Stewardship Sam</h1>
+          <p>Where should I spend Tuesday?</p>
+        </div>
+        <p className="empty-state">Loading&hellip;</p>
+      </main>
+    );
   }
 
   return (
     <main>
-      <div className="today-header">
-        <h1>Stewardship Sam</h1>
-        <p>Where should I spend Tuesday?</p>
-      </div>
+      <HeaderSummary counts={data.counts} total={data.total_count} />
 
-      {error && <p className="error-state">{error}</p>}
-
-      {!error && (
-        <>
-          <p className="queue-summary">
-            {signals.length} relationship{signals.length === 1 ? "" : "s"} need attention today.
-          </p>
-          {signals.length === 0 ? (
-            <p className="empty-state">Nothing needs attention right now.</p>
-          ) : (
-            <ul className="queue">
-              {signals.map((signal) => (
-                <QueueItem key={`${signal.signal_id}-${signal.entity_id}`} signal={signal} />
-              ))}
-            </ul>
-          )}
-
-          <HeldBackSection heldBack={heldBack} />
-        </>
+      {data.signals.length === 0 ? (
+        <p className="empty-state">Nothing needs attention right now.</p>
+      ) : (
+        <ul className="queue">
+          {data.signals.map((item) => (
+            <QueueItemCard key={item.entity_id} item={item} onDismiss={handleDismiss} />
+          ))}
+        </ul>
       )}
+
+      {!showAll && data.total_count > data.signals.length && (
+        <button className="show-all-button" onClick={() => setShowAll(true)}>
+          Show all {data.total_count}
+        </button>
+      )}
+      {showAll && (
+        <button className="show-all-button" onClick={() => setShowAll(false)}>
+          Show fewer
+        </button>
+      )}
+
+      <DismissedSection items={data.dismissed} onRestore={handleRestore} />
+      <HeldBackSection heldBack={data.held_back} />
     </main>
   );
 }

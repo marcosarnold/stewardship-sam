@@ -264,3 +264,63 @@ main > section h2 {
 .placeholder-section {
   opacity: 0.6;
 }
+
+.ranking-factor {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--muted);
+}
+
+.supporting-signals {
+  margin-top: 0.5rem;
+  border-top: 1px dashed var(--border);
+  padding-top: 0.5rem;
+}
+
+.supporting-signal {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.action-pill-small {
+  font-size: 0.65rem;
+  padding: 0.1rem 0.4rem;
+}
+
+.queue-item-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.dismiss-button,
+.restore-button,
+.show-all-button {
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 0.35rem;
+  padding: 0.3rem 0.6rem;
+  cursor: pointer;
+}
+
+.dismiss-button:hover,
+.restore-button:hover,
+.show-all-button:hover {
+  color: var(--foreground);
+  border-color: var(--accent);
+}
+
+.show-all-button {
+  margin-top: 1.5rem;
+}
+
+.restore-button {
+  margin-left: 0.5rem;
+}
