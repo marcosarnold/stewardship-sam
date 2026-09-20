@@ -82,6 +82,7 @@ def build_graph() -> nx.MultiDiGraph:
             name=row["preferred_name"],
             entity_type=row["entity_type"],
             deceased=bool(row["deceased"]),
+            assigned_staff_id=row["assigned_staff_id"],
         )
 
     for name in activities["activity_name"].unique():

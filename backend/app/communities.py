@@ -30,7 +30,7 @@ def _activity_names(graph: nx.MultiDiGraph) -> list[str]:
     return sorted(data["name"] for _, data in graph.nodes(data=True) if data["type"] == "activity")
 
 
-def _members(graph: nx.MultiDiGraph, activity_name: str) -> list[dict]:
+def members(graph: nx.MultiDiGraph, activity_name: str) -> list[dict]:
     node = activity_node(activity_name)
     if node not in graph:
         return []
@@ -46,7 +46,7 @@ def _members(graph: nx.MultiDiGraph, activity_name: str) -> list[dict]:
 def list_communities(graph: nx.MultiDiGraph) -> list[dict]:
     communities = []
     for name in _activity_names(graph):
-        member_count = len(_members(graph, name))
+        member_count = len(members(graph, name))
         communities.append(
             {
                 "id": _slug(name),
@@ -71,7 +71,7 @@ def get_community_members(graph: nx.MultiDiGraph, community_id: str, page: int =
     if community is None:
         return None
 
-    all_members = _members(graph, community["name"])
+    all_members = members(graph, community["name"])
     start = (page - 1) * COMMUNITY_MEMBERS_PAGE_SIZE
     page_members = all_members[start : start + COMMUNITY_MEMBERS_PAGE_SIZE]
 

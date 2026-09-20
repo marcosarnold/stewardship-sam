@@ -11,6 +11,7 @@ Expected `constituent` keys:
     email_status: str   ("deliverable", "do_not_email", "inactive", "missing")
     outbound_dates: list[date]       -- every outbound interaction date, any purpose
     has_scheduled_future_interaction: bool -- a follow-up already booked after AS_OF_DATE
+    not_currently_interested: bool  -- from a confirmed post-call note (issue 018); optional, defaults False
 """
 
 from dataclasses import dataclass
@@ -88,6 +89,14 @@ def evaluate_contact(
     if constituent.get("do_not_solicit") and proposed_action in SOLICITING_ACTIONS:
         return ContactDecision(
             SUPPRESSED, "do_not_solicit", "Constituent has a do-not-solicit restriction.", None
+        )
+
+    if constituent.get("not_currently_interested") and proposed_action in SOLICITING_ACTIONS:
+        return ContactDecision(
+            SUPPRESSED,
+            "not_currently_interested",
+            "A post-call note recorded that the constituent is not currently interested.",
+            None,
         )
 
     if proposed_channel is not None:

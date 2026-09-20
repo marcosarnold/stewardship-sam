@@ -34,6 +34,7 @@ from app.interaction_facts import outbound_dates_by_constituent, scheduled_futur
 from app.models import Signal
 from app.policy import ALLOWED
 from app.registry import all_signals
+from app.relationship_memory import not_currently_interested
 
 # WAIT already means "don't contact"; ASSIGN is internal (issue 004).
 POLICY_EXEMPT_ACTIONS = frozenset({"WAIT", "ASSIGN"})
@@ -46,15 +47,24 @@ POLICY_EXEMPT_ACTIONS = frozenset({"WAIT", "ASSIGN"})
 # type-then-dollar-amount sort would do. RECONNECT/ASSIGN rank last:
 # these relationships have already gone quiet for a long time (SIG3's
 # 730-day-or-ever gap), so one more day of display priority costs little.
-ACTION_BUCKET = {"FOLLOW UP": 0, "WAIT": 1, "THANK": 2, "RECONNECT": 3, "ASSIGN": 4}
+# INVITE/ADVOCATE (SIG6, community-level) share RECONNECT's tier: same
+# underlying "gone quiet" story, just at the community level.
+ACTION_BUCKET = {"FOLLOW UP": 0, "WAIT": 1, "THANK": 2, "RECONNECT": 3, "INVITE": 3, "ADVOCATE": 3, "ASSIGN": 4}
 
 RANKING_FACTOR = {
     "FOLLOW UP": "Promised follow-up is overdue",
     "THANK": "Recent gift has no recorded stewardship",
     "WAIT": "Recent contact pressure suggests restraint",
-    "RECONNECT": "Major donor relationship has gone quiet",
+    "RECONNECT": "Relationship has gone quiet",
+    "INVITE": "Community giving is cooling relative to its history",
+    "ADVOCATE": "Community giving is cooling relative to its history",
     "ASSIGN": "Major donor has no assigned fundraiser",
 }
+
+# Communities have no individual contact facts (phone/email status,
+# do-not-solicit, ...) -- contact policy doesn't apply at that level, so
+# their signals skip evaluate_contact entirely, like WAIT and ASSIGN.
+COMMUNITY_ENTITY_TYPE = "community"
 
 
 @dataclass
@@ -102,7 +112,10 @@ def _secondary_rank(signal: Signal) -> float:
 
 
 def _sort_key(signal: Signal) -> tuple:
-    return (ACTION_BUCKET.get(signal.action, 99), _secondary_rank(signal), signal.entity_id)
+    # entity_id is an int for constituents, a string slug for communities;
+    # str() keeps the tie-breaker comparable across both instead of
+    # raising when a person and a community land in the same bucket/rank.
+    return (ACTION_BUCKET.get(signal.action, 99), _secondary_rank(signal), str(signal.entity_id))
 
 
 def _facts_for(entity_id: int, pop: pd.DataFrame, outbound_dates: dict, scheduled_ids: set) -> dict:
@@ -114,6 +127,7 @@ def _facts_for(entity_id: int, pop: pd.DataFrame, outbound_dates: dict, schedule
         "email_status": row["email_status"],
         "outbound_dates": outbound_dates.get(entity_id, []),
         "has_scheduled_future_interaction": entity_id in scheduled_ids,
+        "not_currently_interested": not_currently_interested(entity_id),
     }
 
 
@@ -132,7 +146,7 @@ def evaluate_signals(context: Context) -> tuple[list[Signal], list[dict]]:
     held_back: list[dict] = []
 
     for signal in raw_signals:
-        if signal.action in POLICY_EXEMPT_ACTIONS:
+        if signal.action in POLICY_EXEMPT_ACTIONS or signal.entity_type == COMMUNITY_ENTITY_TYPE:
             shown.append(signal)
             continue
 
@@ -195,7 +209,8 @@ def build_queue(context: Context) -> tuple[list[QueueItem], list[dict]]:
 
     pop = context.constituents.set_index("id", drop=False)
     for item in items:
-        item.assigned_staff_id = pop.loc[item.entity_id]["assigned_staff_id"]
+        if item.entity_type != COMMUNITY_ENTITY_TYPE:
+            item.assigned_staff_id = pop.loc[item.entity_id]["assigned_staff_id"]
         record = get_dismissal(item.entity_id)
         if record:
             item.dismissed = True

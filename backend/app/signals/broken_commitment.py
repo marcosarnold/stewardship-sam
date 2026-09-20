@@ -48,10 +48,15 @@ def is_explicitly_completed_or_cancelled(interaction_row: pd.Series) -> bool:
     return False
 
 
-def compute_due_commitments(interactions: pd.DataFrame) -> list[dict]:
+def compute_due_commitments(interactions: pd.DataFrame, extra_follow_ups: dict | None = None) -> list[dict]:
     """Every interaction whose follow_up_date is due by AS_OF_DATE, with
     resolution status. Follow-up dates after AS_OF_DATE are upcoming and
     are not included here.
+
+    `extra_follow_ups` (issue 018): {constituent_id: "YYYY-MM-DD"} from a
+    confirmed post-call note (app.relationship_memory) -- a saved
+    follow-up date is a commitment too, resolved the same way as one
+    that came from an interaction row.
     """
     all_interactions = interactions.copy()
     all_interactions["occurred_date"] = pd.to_datetime(all_interactions["occurred_at"]).dt.date
@@ -88,6 +93,35 @@ def compute_due_commitments(interactions: pd.DataFrame) -> list[dict]:
                 "explicitly_completed_or_cancelled": explicitly_resolved,
             }
         )
+
+    for constituent_id, iso_date in (extra_follow_ups or {}).items():
+        follow_up_date = pd.to_datetime(iso_date).date()
+        if follow_up_date > AS_OF_DATE:
+            continue
+        later = all_interactions[
+            (all_interactions["constituent_id"] == constituent_id)
+            & (all_interactions["occurred_date"] >= follow_up_date)
+        ].sort_values("occurred_date")
+        resolved_by = int(later.iloc[0]["id"]) if not later.empty else None
+        resolved_at = later.iloc[0]["occurred_date"] if not later.empty else None
+
+        results.append(
+            {
+                "constituent_id": int(constituent_id),
+                "interaction_id": None,
+                "follow_up_date": follow_up_date,
+                "days_overdue": (AS_OF_DATE - follow_up_date).days,
+                "prior_purpose": "note",
+                "prior_outcome": "logged",
+                "prior_interaction_type": "post-call note",
+                "prior_occurred_date": follow_up_date,
+                "resolved": resolved_by is not None,
+                "resolved_by_interaction_id": resolved_by,
+                "resolved_at": resolved_at,
+                "explicitly_completed_or_cancelled": False,
+            }
+        )
+
     return results
 
 
@@ -145,14 +179,16 @@ def build_signal_and_channel_note(
     return signal, (notes[0] if notes else None)
 
 
-def _detect(constituents: pd.DataFrame, interactions: pd.DataFrame, staff: pd.DataFrame) -> list[Signal]:
+def _detect(
+    constituents: pd.DataFrame, interactions: pd.DataFrame, staff: pd.DataFrame, extra_follow_ups: dict | None = None
+) -> list[Signal]:
     """Raw signals, no channel -- app.priority_queue resolves the channel
     centrally, like every other registered signal type.
     """
     pop = population(constituents).set_index("id", drop=False)
     names = officer_names(staff)
 
-    due = compute_due_commitments(interactions)
+    due = compute_due_commitments(interactions, extra_follow_ups)
     unresolved = [row for row in due if not row["resolved"] and row["constituent_id"] in pop.index]
 
     signals = []
@@ -166,4 +202,6 @@ def _detect(constituents: pd.DataFrame, interactions: pd.DataFrame, staff: pd.Da
 
 @register
 def detect(context: Context) -> list[Signal]:
-    return _detect(context.constituents, context.interactions, context.staff)
+    from app.relationship_memory import all_follow_up_dates
+
+    return _detect(context.constituents, context.interactions, context.staff, all_follow_up_dates())
