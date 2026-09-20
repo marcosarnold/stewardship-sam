@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { fetchRelationship } from "@/lib/api";
-import type { RelationshipSignal } from "@/lib/types";
+import type { CommunityMembership, RelationshipSignal } from "@/lib/types";
+import Timeline from "./Timeline";
 
 function notOnFile(value: string | number | null): string {
   return value === null || value === undefined ? "Not on file" : String(value);
@@ -45,6 +46,18 @@ function SignalCard({ signal }: { signal: RelationshipSignal }) {
           )}
         </>
       )}
+    </li>
+  );
+}
+
+function CommunityRow({ membership }: { membership: CommunityMembership }) {
+  return (
+    <li className="community-membership">
+      <span className="community-membership-name">{membership.name}</span>
+      {membership.role && <span className="community-membership-role"> · {membership.role}</span>}
+      <span className="community-membership-count">
+        {membership.member_count} member{membership.member_count === 1 ? "" : "s"}
+      </span>
     </li>
   );
 }
@@ -118,14 +131,25 @@ export default async function RelationshipPage({
         </section>
       )}
 
-      <section className="placeholder-section">
+      <section>
         <h2>Relationship timeline</h2>
-        <p className="empty-state">Coming in issues/008-relationship-timeline-community-context.md.</p>
+        <Timeline entityId={page.entity_id} />
       </section>
 
-      <section className="placeholder-section">
+      <section>
         <h2>Community context</h2>
-        <p className="empty-state">Coming in issues/008-relationship-timeline-community-context.md.</p>
+        {page.community_context.length === 0 ? (
+          <p className="empty-state">No community memberships are recorded.</p>
+        ) : (
+          <ul className="community-list">
+            {page.community_context.map((membership) => (
+              <CommunityRow key={`${membership.type}-${membership.name}`} membership={membership} />
+            ))}
+          </ul>
+        )}
+        <p className="held-back-caveat">
+          Community links open once issues/009-graph-construction-community-definitions.md exists.
+        </p>
       </section>
     </main>
   );

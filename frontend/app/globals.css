@@ -324,3 +324,102 @@ main > section h2 {
 .restore-button {
   margin-left: 0.5rem;
 }
+
+.timeline-filters {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.timeline-filter-button {
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+}
+
+.timeline-filter-active {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.timeline-list {
+  margin-top: 1rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.timeline-entry {
+  border-left: 2px solid var(--border);
+  padding-left: 0.75rem;
+}
+
+.timeline-entry-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.timeline-entry-type {
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.timeline-entry-headline {
+  margin-top: 0.2rem;
+  font-weight: 600;
+}
+
+.timeline-entry-detail {
+  margin-top: 0.2rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.timeline-expand-button {
+  font: inherit;
+  font-size: 0.8rem;
+  color: var(--accent);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.timeline-pagination {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.community-list {
+  margin-top: 1rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.community-membership-name {
+  font-weight: 600;
+}
+
+.community-membership-role,
+.community-membership-count {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.community-membership-count {
+  margin-left: 0.5rem;
+}

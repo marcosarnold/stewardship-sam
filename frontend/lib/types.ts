@@ -74,6 +74,13 @@ export type KeptCommitment = {
   note: string;
 };
 
+export type CommunityMembership = {
+  type: "activity" | "affiliation";
+  name: string;
+  role: string | null;
+  member_count: number;
+};
+
 export type RelationshipPage = {
   entity_id: number;
   entity_name: string;
@@ -86,4 +93,26 @@ export type RelationshipPage = {
   recommended_action: string | null;
   signals: RelationshipSignal[];
   kept_commitments: KeptCommitment[];
+  community_context: CommunityMembership[];
+};
+
+export type TimelineEntryType = "gift" | "interaction" | "event" | "career_change" | "opportunity";
+
+export type TimelineEntry = {
+  type: TimelineEntryType;
+  date: string;
+  headline: string;
+  detail: string | null;
+  significant: boolean | null;
+  follow_up_date?: string | null;
+};
+
+export type Timeline = {
+  entity_id: number;
+  entries: TimelineEntry[];
+  counts: Record<TimelineEntryType, number>;
+  page: number;
+  page_size: number;
+  total: number;
+  has_more: boolean;
 };
