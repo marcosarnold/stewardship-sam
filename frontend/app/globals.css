@@ -142,3 +142,48 @@ main {
   margin-top: 2rem;
   color: var(--muted);
 }
+
+.held-back {
+  margin-top: 2rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+}
+
+.held-back summary {
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.held-back-reasons {
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.held-back-caveat {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.held-back-list {
+  margin-top: 0.75rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.held-back-list a {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.held-back-reason {
+  color: var(--muted);
+}
