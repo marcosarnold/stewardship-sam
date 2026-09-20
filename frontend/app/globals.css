@@ -187,3 +187,80 @@ main {
 .held-back-reason {
   color: var(--muted);
 }
+
+.relationship-header {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.relationship-header h1 {
+  font-size: 1.5rem;
+  margin-top: 0.75rem;
+}
+
+.relationship-subline {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.relationship-recommendation {
+  margin-top: 0.75rem;
+}
+
+main > section {
+  margin-top: 2rem;
+}
+
+main > section h2 {
+  font-size: 1.1rem;
+}
+
+.signal-list {
+  margin-top: 1rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.signal-card {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.signal-card-held-back {
+  opacity: 0.7;
+  border-style: dashed;
+}
+
+.signal-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.held-back-tag {
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.signal-policy-note {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.kept-commitments-list {
+  margin-top: 1rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.placeholder-section {
+  opacity: 0.6;
+}
