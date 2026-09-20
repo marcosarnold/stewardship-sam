@@ -48,6 +48,26 @@ def activities():
 
 
 @pytest.fixture(scope="session")
+def affiliations():
+    return load_table("affiliations")
+
+
+@pytest.fixture(scope="session")
+def events():
+    return load_table("events")
+
+
+@pytest.fixture(scope="session")
+def event_attendance():
+    return load_table("event_attendance")
+
+
+@pytest.fixture(scope="session")
+def career_history():
+    return load_table("career_history")
+
+
+@pytest.fixture(scope="session")
 def context(constituents, gifts, interactions, staff, opportunities):
     return Context(
         constituents=constituents,

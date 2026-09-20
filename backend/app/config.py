@@ -39,3 +39,7 @@ COMMUNITY_MIN_MEMBERS = 60
 
 TODAY_QUEUE_MAX_ITEMS = 15
 COMMUNITY_GRAPH_MAX_NODES = 150
+
+# Not in Appendix A (no frozen value given for UX2 pagination), but kept
+# here with everything else so no slice hard-codes its own page size.
+TIMELINE_PAGE_SIZE = 20
