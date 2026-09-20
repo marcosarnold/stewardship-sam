@@ -12,12 +12,12 @@ Extend the Ask Sam schema and executor from `issues/014-ask-sam-person-queries.m
 
 ## Acceptance criteria
 
-- [ ] AQ3 returns the same 12 communities as the Today cooling detection and includes Alumni Board.
-- [ ] AQ6's count equals a direct query for Boston, MA constituents with at least one Athletics membership (asserted in a test).
-- [ ] AQ6 results show which athletic communities connect each person, worded as shared institutional context (G5).
-- [ ] An unmatched location returns a clear "no constituents found in that location" message.
-- [ ] Every result links to a Relationship View or Community View and includes a grounded explanation.
-- [ ] The schema validator rejects any intent outside the supported list.
+- [x] AQ3 returns the same 12 communities as the Today cooling detection and includes Alumni Board.
+- [x] AQ6's count equals a direct query for Boston, MA constituents with at least one Athletics membership (asserted in a test).
+- [x] AQ6 results show which athletic communities connect each person, worded as shared institutional context (G5).
+- [x] An unmatched location returns a clear "no constituents found in that location" message.
+- [x] Every result links to a Relationship View or Community View and includes a grounded explanation.
+- [x] The schema validator rejects any intent outside the supported list.
 
 ## Blocked by
 

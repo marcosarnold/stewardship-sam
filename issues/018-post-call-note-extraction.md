@@ -14,13 +14,13 @@ Saved memory appears on the Relationship View and has effects. A solicitation st
 
 ## Acceptance criteria
 
-- [ ] The PRD example note produces: interest = Boston alumni events, communication preference = text, solicitation status = not currently interested, follow-up = November.
-- [ ] Nothing is saved until the fundraiser confirms the extracted fields.
-- [ ] Missing information stays null and is never guessed (G4).
-- [ ] "Not currently interested" makes `evaluate_contact` block ASK for that person, with a test.
-- [ ] A saved follow-up date is picked up by SIG2 once due and unresolved.
-- [ ] A visible indicator shows whenever audio is being recorded, and typed input works without microphone permission.
-- [ ] The text preference is stored even though text outreach is unsupported in the dataset, and is labeled as a preference only.
+- [x] The PRD example note produces: interest = Boston alumni events, communication preference = text, solicitation status = not currently interested, follow-up = November.
+- [x] Nothing is saved until the fundraiser confirms the extracted fields.
+- [x] Missing information stays null and is never guessed (G4).
+- [x] "Not currently interested" makes `evaluate_contact` block ASK for that person, with a test.
+- [x] A saved follow-up date is picked up by SIG2 once due and unresolved.
+- [x] A visible indicator shows whenever audio is being recorded, and typed input works without microphone permission.
+- [x] The text preference is stored even though text outreach is unsupported in the dataset, and is labeled as a preference only.
 
 ## Blocked by
 

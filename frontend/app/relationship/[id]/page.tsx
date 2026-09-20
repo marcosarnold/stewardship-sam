@@ -2,6 +2,8 @@ import Link from "next/link";
 import { fetchRelationship } from "@/lib/api";
 import type { CommunityMembership, RelationshipSignal } from "@/lib/types";
 import Timeline from "./Timeline";
+import PrepareAction from "./PrepareAction";
+import PostCallNote from "./PostCallNote";
 
 function notOnFile(value: string | number | null): string {
   return value === null || value === undefined ? "Not on file" : String(value);
@@ -106,6 +108,19 @@ export default async function RelationshipPage({
           )}
         </p>
       </header>
+
+      <section>
+        <h2>Prepare action</h2>
+        <p className="relationship-subline">
+          Sam never sends, calls, or solicits on your behalf -- this is a brief for you to act on.
+        </p>
+        <PrepareAction entityId={page.entity_id} />
+      </section>
+
+      <section>
+        <h2>Post-call note</h2>
+        <PostCallNote entityId={page.entity_id} />
+      </section>
 
       <section>
         <h2>Why Sam surfaced this</h2>

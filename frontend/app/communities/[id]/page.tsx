@@ -10,21 +10,37 @@ export default function CommunityMembersPage({ params }: { params: Promise<{ id:
   const [page, setPage] = useState(1);
   const [data, setData] = useState<CommunityMembers | null>(null);
   const [notFound, setNotFound] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    fetchCommunityMembers(id, page).then((result) => {
-      if (cancelled) return;
-      if (result === null) {
-        setNotFound(true);
-      } else {
-        setData(result);
-      }
-    });
+    fetchCommunityMembers(id, page)
+      .then((result) => {
+        if (cancelled) return;
+        if (result === null) {
+          setNotFound(true);
+        } else {
+          setData(result);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setError("Could not reach the Stewardship Sam API. Is the backend running?");
+      });
     return () => {
       cancelled = true;
     };
   }, [id, page]);
+
+  if (error) {
+    return (
+      <main>
+        <p>
+          <Link href="/communities">&larr; Back to Communities</Link>
+        </p>
+        <p className="error-state">{error}</p>
+      </main>
+    );
+  }
 
   if (notFound) {
     return (

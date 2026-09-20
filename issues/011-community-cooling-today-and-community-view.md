@@ -14,13 +14,13 @@ The PRD's Today mock labels this action RE-ENGAGE, which is not in the constrain
 
 ## Acceptance criteria
 
-- [ ] 12 communities are detected as cooling, and Alumni Board is one of them (Appendix B).
-- [ ] The Alumni Board card shows "59% ever gave" moving to "9% gave in the past year" and "21% had an interaction in the last two years".
-- [ ] A test confirms a community with high historical giving and steady recent giving is not flagged.
-- [ ] Community items are visually distinct from people on Today, dismissible, and link to the Community View.
-- [ ] Explore members lists members with counts of their attention signals and links to each Relationship View.
-- [ ] The recommended action follows the documented rule, and "RE-ENGAGE" is never used as an action.
-- [ ] Wording states associations are descriptive, not causal (Section 3 caveat).
+- [x] 12 communities are detected as cooling, and Alumni Board is one of them (Appendix B).
+- [x] The Alumni Board card shows "59% ever gave" moving to "9% gave in the past year" and "21% had an interaction in the last two years".
+- [x] A test confirms a community with high historical giving and steady recent giving is not flagged.
+- [x] Community items are visually distinct from people on Today, dismissible, and link to the Community View.
+- [x] Explore members lists members with counts of their attention signals and links to each Relationship View.
+- [x] The recommended action follows the documented rule, and "RE-ENGAGE" is never used as an action.
+- [x] Wording states associations are descriptive, not causal (Section 3 caveat).
 
 ## Blocked by
 

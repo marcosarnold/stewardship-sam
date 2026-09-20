@@ -14,12 +14,12 @@ This slice is intentionally backend-only so it can run in parallel with UI work.
 
 ## Acceptance criteria
 
-- [ ] Results for Alumni Board are deterministic and each connector includes overlap count, the two centrality values, the communities spanned, and the basis text.
-- [ ] A test scans all generated text and fails on "influential", "influence", "friend", or similar claims (G5).
-- [ ] Each connector includes a policy status (allowed, suppressed, or restricted).
-- [ ] The analysis runs in under 5 seconds cold and is cached afterward.
-- [ ] API docs state that overlap shows shared institutional context, not friendship or influence.
-- [ ] Unit tests use a small hand-built graph with known centrality values.
+- [x] Results for Alumni Board are deterministic and each connector includes overlap count, the two centrality values, the communities spanned, and the basis text.
+- [x] A test scans all generated text and fails on "influential", "influence", "friend", or similar claims (G5).
+- [x] Each connector includes a policy status (allowed, suppressed, or restricted).
+- [x] The analysis runs in under 5 seconds cold and is cached afterward.
+- [x] API docs state that overlap shows shared institutional context, not friendship or influence.
+- [x] Unit tests use a small hand-built graph with known centrality values.
 
 ## Blocked by
 

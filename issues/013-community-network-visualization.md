@@ -12,15 +12,19 @@ Add the signature visualization to the Community View from `issues/011-community
 
 **Human checkpoints:** (1) review a sketch of node, edge, and color encoding before building; (2) review the finished screen against the 30-second comprehension goal with someone who has not seen it.
 
+**Checkpoint 1 outcome:** approved as proposed (2026-09-20) — center community node, member dots around it, connectors highlighted larger with an accent border and hover/click basis text, bridge communities as diamonds on the outer ring, capped at `COMMUNITY_GRAPH_MAX_NODES` with a "+N more" node. No changes requested.
+
+**Checkpoint 2 outcome:** given the project deadline, no outside naive-user reviewer was available; the user reviewed the finished screenshot directly against the 30-second comprehension goal instead of a blind third party (2026-09-20) and approved it as-is. No changes requested. This substitution is a documented deviation from the literal checkpoint instruction, made under explicit time pressure.
+
 ## Acceptance criteria
 
-- [ ] Alumni Board renders in under 2 seconds with connectors visibly highlighted.
-- [ ] Hover or click on a connector shows the basis text from the connectors API.
-- [ ] Clicking a person opens their Relationship View; clicking a bridge community opens its Community View.
-- [ ] Node cap works and the omitted count is shown.
-- [ ] A legend and the G5 note are visible, and a list view offers the same information without the graph.
-- [ ] Both human checkpoints are recorded with outcome and any changes made.
-- [ ] The screen supports a decision (who to talk to about this community) and is not a decorative homepage graph (Section 11).
+- [x] Alumni Board renders in under 2 seconds with connectors visibly highlighted. (Verified against a production build — `npm run build && npm start` — at ~1.56s; the Next.js dev server's compile/HMR overhead made this criterion unmeasurable in dev mode.)
+- [x] Hover or click on a connector shows the basis text from the connectors API.
+- [x] Clicking a person opens their Relationship View; clicking a bridge community opens its Community View.
+- [x] Node cap works and the omitted count is shown.
+- [x] A legend and the G5 note are visible, and a list view offers the same information without the graph.
+- [x] Both human checkpoints are recorded with outcome and any changes made.
+- [x] The screen supports a decision (who to talk to about this community) and is not a decorative homepage graph (Section 11).
 
 ## Blocked by
 

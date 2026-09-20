@@ -49,6 +49,8 @@ Dismissing a Today item (`POST /api/today/{id}/dismiss`) is persisted to `backen
 
 `GET /api/communities` and `GET /api/communities/{id}/members` expose the NetworkX relationship graph's communities (an activity with at least `COMMUNITY_MIN_MEMBERS` eligible members). The graph is built once at startup and cached; an edge is shared institutional context, such as a common activity, never a direct social relationship or friendship (G5).
 
+SIG4 (Relationship Change) detects 2,184 people with a career change, event attendance, changed affiliation, or new opportunity within `RELATIONSHIP_CHANGE_WINDOW_DAYS` (180 days) of `AS_OF_DATE`; a new gift alone never triggers it, since that is SIG1's job. 2,147 of those pass contact policy and appear on Today as RECONNECT or INVITE.
+
 ### Frontend (Next.js)
 
 ```sh
@@ -71,3 +73,12 @@ cd backend
 cd frontend
 npm run build   # type-checks and builds
 ```
+
+## Demo
+
+1. Start the backend and frontend as above (two terminals).
+2. Reset to a clean, deterministic state before rehearsing or presenting: `curl -X POST http://localhost:8000/api/demo/reset` (or `.venv/bin/python -m app.demo_reset` from `backend/`). This clears dismissals, recorded action outcomes, and saved post-call notes, and rebuilds the graph/metrics caches fresh.
+3. Walk the script (PRD Section 23, Appendix C): open Today → FOLLOW UP with Nia Chen, and open Isaac Chen's Relationship View as the control whose May 15 commitment was kept → THANK with Valerie Kaur → WAIT with Kieran Kaur → ask Sam "Which communities are we losing touch with?" → open Alumni Board's Community View for its network and connectors → close back on Today.
+4. `tests/test_demo_path.py` runs this same walk against the API automatically (`.venv/bin/pytest tests/test_demo_path.py`), and `tests/test_demo_performance.py` / `tests/test_demo_llm_outage.py` verify the performance budget and that everything still works with no `OPENAI_API_KEY` set.
+
+No `OPENAI_API_KEY` is required to run the demo: every explanation, Ask Sam answer, and note extraction has a deterministic fallback (see `backend/app/explain/`, `backend/app/ask_sam/intent.py`, `backend/app/relationship_notes.py`).

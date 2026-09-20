@@ -12,12 +12,12 @@ Compute the SIG6 inputs per community and show them: member count, historical gi
 
 ## Acceptance criteria
 
-- [ ] Alumni Board shows about 58.9% ever gave, 8.9% gave in the last 365 days, and 20.6% had an interaction in the last 730 days (Appendix B), within rounding.
-- [ ] Every metric's numerator and denominator are documented and computed only in code.
-- [ ] A test on a small synthetic dataset verifies each definition, including the window boundaries.
-- [ ] The Communities page sorts by each metric.
-- [ ] The event-data limitation is shown next to event metrics (G4).
-- [ ] Metrics for all 79 communities compute in under 5 seconds and are cached.
+- [x] Alumni Board shows about 58.9% ever gave, 8.9% gave in the last 365 days, and 20.6% had an interaction in the last 730 days (Appendix B), within rounding.
+- [x] Every metric's numerator and denominator are documented and computed only in code.
+- [x] A test on a small synthetic dataset verifies each definition, including the window boundaries.
+- [x] The Communities page sorts by each metric.
+- [x] The event-data limitation is shown next to event metrics (G4).
+- [x] Metrics for all 79 communities compute in under 5 seconds and are cached.
 
 ## Blocked by
 

@@ -423,3 +423,141 @@ main > section h2 {
 .community-membership-count {
   margin-left: 0.5rem;
 }
+
+.metrics-table {
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.metrics-table th,
+.metrics-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.queue-item-community {
+  background: var(--pill-bg);
+  border-style: dashed;
+}
+
+.community-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+  margin-right: 0.4rem;
+  text-transform: uppercase;
+}
+
+.community-graph-canvas {
+  margin-top: 0.75rem;
+  width: 100%;
+  height: 420px;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+}
+
+.graph-legend {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  align-items: center;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 0.3rem;
+  vertical-align: middle;
+}
+
+.legend-center {
+  background: #1d4ed8;
+}
+
+.legend-connector {
+  background: #f59e0b;
+  border: 2px solid #b45309;
+}
+
+.legend-person {
+  background: #9ca3af;
+}
+
+.legend-bridge {
+  background: #1d4ed8;
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+
+.ask-sam {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.ask-sam-toggle {
+  font: inherit;
+  font-weight: 700;
+  background: var(--accent);
+  color: var(--background);
+  border: none;
+  border-radius: 999px;
+  padding: 0.6rem 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.ask-sam-panel {
+  width: min(360px, calc(100vw - 2rem));
+  max-height: 70vh;
+  overflow-y: auto;
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  padding: 0.85rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.ask-sam-panel form {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.ask-sam-input {
+  flex: 1;
+  font: inherit;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.ask-sam-submit {
+  font: inherit;
+  font-weight: 600;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 0.4rem;
+  background: var(--accent);
+  color: var(--background);
+  cursor: pointer;
+}
+
+.ask-sam-response {
+  margin-top: 0.75rem;
+  font-size: 0.9rem;
+}

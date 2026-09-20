@@ -14,12 +14,12 @@ Add a "Prepare action" panel to the Relationship View from `issues/005-relations
 
 ## Acceptance criteria
 
-- [ ] The brief includes the action, the allowed channel, the officer who owns the relationship (G3), and evidence bullets.
-- [ ] No full message drafts are produced (non-goal, Section 20); output is talking points or a checklist.
-- [ ] Confirmation controls record an outcome with a timestamp, and the Today queue updates accordingly.
-- [ ] Nothing in the app sends, calls, or writes to GiveCampus data; a test asserts no outbound side effects.
-- [ ] Restricted channels are never suggested (G1).
-- [ ] Works with the LLM unavailable via deterministic fallback.
+- [x] The brief includes the action, the allowed channel, the officer who owns the relationship (G3), and evidence bullets.
+- [x] No full message drafts are produced (non-goal, Section 20); output is talking points or a checklist.
+- [x] Confirmation controls record an outcome with a timestamp, and the Today queue updates accordingly.
+- [x] Nothing in the app sends, calls, or writes to GiveCampus data; a test asserts no outbound side effects.
+- [x] Restricted channels are never suggested (G1).
+- [x] Works with the LLM unavailable via deterministic fallback.
 
 ## Blocked by
 

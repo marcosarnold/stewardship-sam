@@ -47,6 +47,9 @@ function HeaderSummary({ counts, total }: { counts: Record<string, number>; tota
         {total} relationship{total === 1 ? "" : "s"} need attention today.
       </p>
       {parts.length > 0 && <p className="queue-summary">{parts.join(" | ")}</p>}
+      <p className="queue-summary">
+        <Link href="/communities">Communities</Link>
+      </p>
     </div>
   );
 }
@@ -56,12 +59,16 @@ function QueueItemCard({
   onDismiss,
 }: {
   item: QueueItemType;
-  onDismiss: (entityId: number) => void;
+  onDismiss: (entityId: number | string) => void;
 }) {
+  const isCommunity = item.entity_type === "community";
   return (
-    <li className="queue-item">
+    <li className={`queue-item${isCommunity ? " queue-item-community" : ""}`}>
       <div className="queue-item-header">
-        <span className="entity-name">{item.entity_name}</span>
+        <span className="entity-name">
+          {isCommunity && <span className="community-badge">Community</span>}
+          {item.entity_name}
+        </span>
         <span className="action-pill">{item.action}</span>
       </div>
       <p className="ranking-factor">{item.ranking_factor}</p>
@@ -70,7 +77,7 @@ function QueueItemCard({
           <li key={line}>{line}</li>
         ))}
       </ul>
-      {item.action !== "WAIT" && (
+      {!isCommunity && item.action !== "WAIT" && (
         <p className="channel-hint">Allowed channel: {channelLabel(item.channel_hint)}</p>
       )}
       {item.supporting_signals.length > 0 && (
@@ -84,8 +91,8 @@ function QueueItemCard({
         </div>
       )}
       <div className="queue-item-actions">
-        <Link className="view-link" href={`/relationship/${item.entity_id}`}>
-          View relationship
+        <Link className="view-link" href={isCommunity ? `/community/${item.entity_id}` : `/relationship/${item.entity_id}`}>
+          {isCommunity ? "Explore community" : "View relationship"}
         </Link>
         <button className="dismiss-button" onClick={() => onDismiss(item.entity_id)}>
           Dismiss
@@ -100,7 +107,7 @@ function DismissedSection({
   onRestore,
 }: {
   items: QueueItemType[];
-  onRestore: (entityId: number) => void;
+  onRestore: (entityId: number | string) => void;
 }) {
   if (items.length === 0) {
     return null;
@@ -112,7 +119,9 @@ function DismissedSection({
       <ul className="held-back-list">
         {items.map((item) => (
           <li key={item.entity_id}>
-            <Link href={`/relationship/${item.entity_id}`}>{item.entity_name}</Link>
+            <Link href={item.entity_type === "community" ? `/community/${item.entity_id}` : `/relationship/${item.entity_id}`}>
+              {item.entity_name}
+            </Link>
             <span className="held-back-reason">
               {" "}
               &mdash; {item.dismiss_reason ?? "no reason given"}
@@ -177,11 +186,11 @@ export default function TodayPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showAll]);
 
-  const handleDismiss = (entityId: number) => {
+  const handleDismiss = (entityId: number | string) => {
     dismissToday(entityId, null).then(() => load(showAll));
   };
 
-  const handleRestore = (entityId: number) => {
+  const handleRestore = (entityId: number | string) => {
     restoreToday(entityId).then(() => load(showAll));
   };
 

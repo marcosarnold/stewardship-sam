@@ -8,7 +8,7 @@ export type SupportingSignal = {
 // Signal -- see RelationshipSignal for that (the unmerged "why" list).
 export type QueueItem = {
   entity_type: string;
-  entity_id: number;
+  entity_id: number | string;
   entity_name: string;
   action: string;
   evidence: string[];
@@ -117,6 +117,54 @@ export type Timeline = {
   has_more: boolean;
 };
 
+export type ExploreMember = {
+  entity_id: number;
+  entity_name: string;
+  signal_count: number;
+};
+
+export type CommunityView = {
+  id: string;
+  name: string;
+  member_count: number;
+  historical_giving_rate: number;
+  recent_giving_rate: number;
+  recent_interaction_rate: number;
+  recommended_action: string | null;
+  why_surfaced: string[];
+  explore_members: ExploreMember[];
+  wording_note: string;
+};
+
+export type CommunityGraphNode = {
+  id: string;
+  type: "community" | "person";
+  name: string;
+  entity_id?: number;
+  is_center?: boolean;
+  is_connector?: boolean;
+  signal_count?: number;
+  basis?: string | null;
+  policy_status?: string | null;
+  community_id?: string | null;
+};
+
+export type CommunityGraphEdge = {
+  source: string;
+  target: string;
+  type: string;
+};
+
+export type CommunityGraph = {
+  id: string;
+  name: string;
+  nodes: CommunityGraphNode[];
+  edges: CommunityGraphEdge[];
+  omitted_count: number;
+  node_cap: number;
+  wording_note: string;
+};
+
 export type Community = {
   id: string;
   name: string;
@@ -128,6 +176,57 @@ export type Community = {
 export type CommunityMember = {
   entity_id: number;
   entity_name: string;
+};
+
+export type CommunityMetrics = {
+  member_count: number;
+  historical_giving_rate: number;
+  recent_giving_rate: number;
+  recent_to_historical_ratio: number | null;
+  recent_interaction_rate: number;
+  historical_event_participation: number;
+  recent_event_participation: number;
+  stewardship_coverage: number;
+  assignment_coverage: number;
+  event_data_caveat: string;
+};
+
+export type AskResponse = {
+  intent: string | null;
+  answer: string;
+  examples: string[] | null;
+  results: unknown;
+};
+
+export type ActionOutcome = {
+  entity_id: number | string;
+  action: string | null;
+  outcome: "done" | "not_now" | "dismissed";
+  note: string | null;
+  recorded_at: string;
+};
+
+export type ActionBrief = {
+  entity_id: number;
+  entity_name: string;
+  assigned_officer: string | null;
+  action: string | null;
+  channel_hint: string | null;
+  evidence: string[];
+  talking_points: string[];
+  last_outcome: ActionOutcome | null;
+};
+
+export type ExtractedNote = {
+  interest: string | null;
+  communication_preference: "phone" | "email" | "text" | null;
+  solicitation_status: "not_currently_interested" | null;
+  follow_up_date: string | null;
+};
+
+export type SavedNote = ExtractedNote & {
+  raw_note: string;
+  recorded_at: string;
 };
 
 export type CommunityMembers = {

@@ -12,12 +12,12 @@ Implement SIG4 as a new detector registered with the queue from `issues/007-prio
 
 ## Acceptance criteria
 
-- [ ] People with a career change in the last 180 days surface with neutral evidence.
-- [ ] A test confirms a career change alone never produces ASK and evidence text never mentions wealth, capacity, or likelihood to give (G6).
-- [ ] INVITE is used only when an upcoming event exists; otherwise RECONNECT.
-- [ ] Duplicate signals for a person merge into one queue item (relies on slice 007).
-- [ ] Policy checks apply, so restricted or recently contacted people are held back with a reason.
-- [ ] The window comes from the config module, and the number of detected people is reported in the README.
+- [x] People with a career change in the last 180 days surface with neutral evidence.
+- [x] A test confirms a career change alone never produces ASK and evidence text never mentions wealth, capacity, or likelihood to give (G6).
+- [x] INVITE is used only when an upcoming event exists; otherwise RECONNECT.
+- [x] Duplicate signals for a person merge into one queue item (relies on slice 007).
+- [x] Policy checks apply, so restricted or recently contacted people are held back with a reason.
+- [x] The window comes from the config module, and the number of detected people is reported in the README.
 
 ## Blocked by
 

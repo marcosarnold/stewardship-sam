@@ -14,14 +14,18 @@ Add a seed/reset command that returns the app to a deterministic state (dismissa
 
 ## Acceptance criteria
 
-- [ ] A reset command restores the demo state, and an automated test verifies every cast member's expected action (Appendix B).
-- [ ] Today loads in under 2 seconds, the community graph in under 2 seconds, and Ask Sam answers in under 5 seconds on the demo machine.
-- [ ] With the LLM disabled, the entire demo path still works via template fallbacks.
-- [ ] Loading, empty, and error states exist on every screen.
-- [ ] The 30-second comprehension test is run with two people, and results and fixes are recorded.
-- [ ] Speaker notes state the data caveats: missing records are not proof something did not happen, the data is synthetic, and restriction flags are a snapshot.
-- [ ] A backup recording of the full demo exists.
-- [ ] Run instructions let a teammate start the app from scratch.
+- [x] A reset command restores the demo state, and an automated test verifies every cast member's expected action (Appendix B). (`POST /api/demo/reset`, `backend/app/demo_reset.py`; `tests/test_demo_path.py`.)
+- [x] Today loads in under 2 seconds, the community graph in under 2 seconds, and Ask Sam answers in under 5 seconds on the demo machine. (`tests/test_demo_performance.py`, verified passing.)
+- [x] With the LLM disabled, the entire demo path still works via template fallbacks. (`tests/test_demo_llm_outage.py`; this environment has no `OPENAI_API_KEY`, so every other test already exercises this path too.)
+- [x] Loading, empty, and error states exist on every screen. (Audited all six pages/components; added the missing ones to `communities/page.tsx`, `communities/[id]/page.tsx`, `AskSam.tsx`, and `CommunityGraph.tsx`.)
+- [ ] The 30-second comprehension test is run with two people, and results and fixes are recorded. **Not done** — requires two people who haven't seen the product; the log template is in the speaker notes, unfilled.
+- [x] Speaker notes state the data caveats: missing records are not proof something did not happen, the data is synthetic, and restriction flags are a snapshot. (Published artifact, see below.)
+- [ ] A backup recording of the full demo exists. **Not done** — I can't record video; someone needs to record a run using the speaker-notes script.
+- [x] Run instructions let a teammate start the app from scratch. (README "Running the app" and new "Demo" section.)
+
+**Speaker notes:** https://claude.ai/artifact/QXm7Np51aNGtVGYUD2UHXW — five-beat script, data caveats, troubleshooting, and the comprehension-check log template.
+
+**Human checkpoint:** not completed by the agent — rehearsing with two people who haven't used the product, and recording a backup video, both require a human in the loop that couldn't be arranged under this session's time constraint. Flagging honestly rather than fabricating results.
 
 ## Blocked by
 

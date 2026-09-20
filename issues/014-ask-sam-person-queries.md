@@ -14,14 +14,14 @@ Supported here: AQ1 (who have we promised to follow up with: overdue unresolved 
 
 ## Acceptance criteria
 
-- [ ] AQ1 returns Nia Chen as overdue and unresolved, lists upcoming follow-ups separately, and can show Isaac Chen's commitment as resolved when asked.
-- [ ] AQ2's count equals a direct data query for living individuals with $10,000+ lifetime giving and no assigned officer (asserted in a test).
-- [ ] AQ4 lists Kieran Kaur with the contact-pressure reason and the held-back people with their reason codes.
-- [ ] AQ5 for "Valerie" resolves to Valerie Kaur or asks which Valerie is meant.
-- [ ] Every answer updates the UI (a result list or filtered queue) and includes an explanation grounded in evidence.
-- [ ] Tests use a mocked LLM; a keyword fallback handles the four exact phrasings when the API is unavailable.
-- [ ] Unsupported questions return the "can't answer yet" response with examples, and never a guess.
-- [ ] A prompt-injection test through interaction notes does not change results.
+- [x] AQ1 returns Nia Chen as overdue and unresolved, lists upcoming follow-ups separately, and can show Isaac Chen's commitment as resolved when asked.
+- [x] AQ2's count equals a direct data query for living individuals with $10,000+ lifetime giving and no assigned officer (asserted in a test).
+- [x] AQ4 lists Kieran Kaur with the contact-pressure reason and the held-back people with their reason codes.
+- [x] AQ5 for "Valerie" resolves to Valerie Kaur or asks which Valerie is meant. (The dataset has 100+ people named Valerie, so first-name-only is genuinely ambiguous and correctly asks; the full name "Valerie Kaur" resolves uniquely.)
+- [x] Every answer updates the UI (a result list or filtered queue) and includes an explanation grounded in evidence.
+- [x] Tests use a mocked LLM; a keyword fallback handles the four exact phrasings when the API is unavailable.
+- [x] Unsupported questions return the "can't answer yet" response with examples, and never a guess.
+- [x] A prompt-injection test through interaction notes does not change results.
 
 ## Blocked by
 
