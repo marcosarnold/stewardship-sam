@@ -47,10 +47,13 @@ def resolve_channel(facts: dict, action: str) -> tuple[ContactDecision, list[tup
     return chosen, notes
 
 
-def channel_note(allowed_channel: str, rejected: list[tuple[str, ContactDecision]]) -> list[str]:
+def channel_note(allowed_channel: str | None, rejected: list[tuple[str, ContactDecision]]) -> list[str]:
     """Evidence lines explaining why a non-chosen channel wasn't used."""
     lines = []
     for _, rejection in rejected:
         reason_text = rejection.reason.rstrip(".") if rejection.reason else "Not viable"
-        lines.append(f"{reason_text}; {allowed_channel} is the allowed channel")
+        if allowed_channel:
+            lines.append(f"{reason_text}; {allowed_channel} is the allowed channel")
+        else:
+            lines.append(f"{reason_text}; no channel is currently available")
     return lines
