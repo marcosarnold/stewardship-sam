@@ -14,12 +14,12 @@ Today shows these items. Until `issues/007-priority-queue-and-dismissal.md` merg
 
 ## Acceptance criteria
 
-- [ ] 116 living individuals with $10,000+ lifetime giving and no interaction in 730 days (or ever) are detected; 101 get ASSIGN and 15 get RECONNECT (Appendix B).
-- [ ] Every ASSIGN item states that no fundraiser is assigned; every RECONNECT item names the assigned officer before suggesting action (G3).
-- [ ] The signal never returns ASK, and a unit test enforces it (G1).
-- [ ] Evidence says "No interaction is recorded" rather than "never contacted" when there are no interactions (G4).
-- [ ] `do_not_solicit` people can still receive ASSIGN (an internal action) but the policy result is shown alongside.
-- [ ] Threshold values come only from the config module.
+- [x] 116 living individuals with $10,000+ lifetime giving and no interaction in 730 days (or ever) are detected; 101 get ASSIGN and 15 get RECONNECT (Appendix B).
+- [x] Every ASSIGN item states that no fundraiser is assigned; every RECONNECT item names the assigned officer before suggesting action (G3).
+- [x] The signal never returns ASK, and a unit test enforces it (G1).
+- [x] Evidence says "No interaction is recorded" rather than "never contacted" when there are no interactions (G4).
+- [x] `do_not_solicit` people can still receive ASSIGN (an internal action) but the policy result is shown alongside.
+- [x] Threshold values come only from the config module.
 
 ## Blocked by
 
