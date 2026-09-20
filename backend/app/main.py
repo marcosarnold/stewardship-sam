@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import TODAY_QUEUE_MAX_ITEMS
 from app.db import load_table
+from app.followups import build_followups
 from app.today import build_today_queue, summarize_held_back
 
 app = FastAPI(title="Stewardship Sam API")
@@ -34,3 +35,12 @@ def get_today():
         "signals": [s.to_dict() for s in today_items[:TODAY_QUEUE_MAX_ITEMS]],
         "held_back": summarize_held_back(held_back),
     }
+
+
+@app.get("/api/followups")
+def get_followups(include_resolved: bool = False):
+    constituents = load_table("constituents")
+    interactions = load_table("interactions")
+    staff = load_table("staff")
+
+    return build_followups(constituents, interactions, staff, include_resolved)
