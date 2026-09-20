@@ -21,3 +21,8 @@ def interactions():
 @pytest.fixture(scope="session")
 def staff():
     return load_table("staff")
+
+
+@pytest.fixture(scope="session")
+def opportunities():
+    return load_table("opportunities")
