@@ -1,10 +1,13 @@
 """FastAPI app exposing the Today queue."""
 
+from contextlib import asynccontextmanager
+
 import pandas as pd
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
+from app.communities import get_community_members, list_communities
 from app.config import TODAY_QUEUE_MAX_ITEMS
 from app.context import build_context
 from app.db import load_table
@@ -12,11 +15,19 @@ from app.dismissals import dismiss, restore
 from app.explain import explain
 from app.explain.from_signal import payload_from_signal_dict
 from app.followups import build_followups
+from app.graph import get_graph
 from app.priority_queue import build_queue, summarize_counts, summarize_held_back
 from app.relationships import build_relationship, find_constituent
 from app.timeline import TIMELINE_TYPES, build_timeline
 
-app = FastAPI(title="Stewardship Sam API")
+
+@asynccontextmanager
+async def _lifespan(app: FastAPI):
+    get_graph()  # built once at startup and cached (issue 009), not on first request
+    yield
+
+
+app = FastAPI(title="Stewardship Sam API", lifespan=_lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -131,3 +142,16 @@ def get_relationship_timeline(entity_id: int, types: str | None = None, page: in
         types=requested_types,
         page=page,
     )
+
+
+@app.get("/api/communities")
+def get_communities():
+    return {"communities": list_communities(get_graph())}
+
+
+@app.get("/api/communities/{community_id}/members")
+def get_communities_members(community_id: str, page: int = 1):
+    result = get_community_members(get_graph(), community_id, page)
+    if result is None:
+        raise HTTPException(status_code=404, detail=f"No community with id {community_id}.")
+    return result

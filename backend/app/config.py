@@ -43,3 +43,4 @@ COMMUNITY_GRAPH_MAX_NODES = 150
 # Not in Appendix A (no frozen value given for UX2 pagination), but kept
 # here with everything else so no slice hard-codes its own page size.
 TIMELINE_PAGE_SIZE = 20
+COMMUNITY_MEMBERS_PAGE_SIZE = 50
