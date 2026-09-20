@@ -5,9 +5,16 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import TODAY_QUEUE_MAX_ITEMS
 from app.db import load_table
+from app.explain import explain
+from app.explain.from_signal import payload_from_signal_dict
 from app.followups import build_followups
 from app.relationships import build_relationship
 from app.today import build_today_queue, summarize_held_back
+
+
+def _with_explanation(signal: dict) -> dict:
+    result = explain(payload_from_signal_dict(signal))
+    return {**signal, "explanation": result.text, "explanation_source": result.source}
 
 app = FastAPI(title="Stewardship Sam API")
 
@@ -42,7 +49,7 @@ def get_today():
     )
 
     return {
-        "signals": [s.to_dict() for s in today_items[:TODAY_QUEUE_MAX_ITEMS]],
+        "signals": [_with_explanation(s.to_dict()) for s in today_items[:TODAY_QUEUE_MAX_ITEMS]],
         "held_back": summarize_held_back(held_back),
     }
 
@@ -75,4 +82,5 @@ def get_relationship(entity_id: int):
             detail=f"No relationship record for id {entity_id}: unknown, not an individual, or deceased.",
         )
 
+    relationship["signals"] = [_with_explanation(s) for s in relationship["signals"]]
     return relationship
