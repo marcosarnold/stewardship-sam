@@ -23,13 +23,22 @@ def get_today():
     constituents = load_table("constituents")
     gifts = load_table("gifts")
     interactions = load_table("interactions")
+    staff = load_table("staff")
+    opportunities = load_table("opportunities")
 
-    today_items, held_back = build_today_queue(constituents, gifts, interactions)
+    today_items, held_back = build_today_queue(
+        constituents, gifts, interactions, staff, opportunities
+    )
     # Provisional ordering only (real ranking is issues/007-priority-queue-and-dismissal.md).
-    # WAIT signals surface first so contact-pressure restraint (SC8) isn't
-    # crowded out by the much larger THANK pool under the display cap;
-    # THANK is then ordered by gift amount, per issue 001.
-    today_items.sort(key=lambda s: (s.action != "WAIT", -(s.urgency_amount or 0)))
+    # Bucket by action first so no signal type is entirely crowded out of the
+    # display cap by another type's larger dollar figures -- ASSIGN/RECONNECT
+    # rank by lifetime giving, which otherwise dwarfs THANK's single-gift
+    # amounts and would bury it. WAIT surfaces first for restraint (SC8),
+    # then THANK (issue 001), then RECONNECT/ASSIGN (issue 004).
+    _ACTION_PRIORITY = {"WAIT": 0, "THANK": 1, "RECONNECT": 2, "ASSIGN": 3}
+    today_items.sort(
+        key=lambda s: (_ACTION_PRIORITY.get(s.action, 99), -(s.urgency_amount or 0))
+    )
 
     return {
         "signals": [s.to_dict() for s in today_items[:TODAY_QUEUE_MAX_ITEMS]],
