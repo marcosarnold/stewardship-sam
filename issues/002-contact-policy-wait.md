@@ -16,13 +16,13 @@ Apply the policy to the THANK signals from `issues/001-data-layer-stewardship-ga
 
 ## Acceptance criteria
 
-- [ ] Kieran Kaur (12022) appears as WAIT with evidence "5 outbound interactions in the last 60 days" and the most recent date. No THANK is shown for him.
-- [ ] Exactly 8 people trigger contact pressure (Appendix B).
-- [ ] Valerie Kaur's recommended channel is email, and the evidence says her phone is marked do-not-call (G1).
-- [ ] `evaluate_contact` is a pure function with unit tests for: deceased, `do_not_solicit` blocking any solicitation, `do_not_call`, inactive or missing email, the 14-day suppression, the boundary at exactly 60 days and exactly 3 interactions, and an overdue FOLLOW UP being exempt from the 14-day suppression.
-- [ ] Every suppressed or WAIT decision carries a reason code and a human-readable reason.
-- [ ] Today shows a collapsed "Held back today" list with counts by reason, and each entry links to the person.
-- [ ] Docs state that restriction flags are a current snapshot, so past outreach may appear to conflict with them (Appendix C item 8).
+- [x] Kieran Kaur (12022) appears as WAIT with evidence "5 outbound interactions in the last 60 days" and the most recent date. No THANK is shown for him.
+- [x] Exactly 8 people trigger contact pressure (Appendix B).
+- [x] Valerie Kaur's recommended channel is email, and the evidence says her phone is marked do-not-call (G1).
+- [x] `evaluate_contact` is a pure function with unit tests for: deceased, `do_not_solicit` blocking any solicitation, `do_not_call`, inactive or missing email, the 14-day suppression, the boundary at exactly 60 days and exactly 3 interactions, and an overdue FOLLOW UP being exempt from the 14-day suppression.
+- [x] Every suppressed or WAIT decision carries a reason code and a human-readable reason.
+- [x] Today shows a collapsed "Held back today" list with counts by reason, and each entry links to the person.
+- [x] Docs state that restriction flags are a current snapshot, so past outreach may appear to conflict with them (Appendix C item 8).
 
 ## Blocked by
 

@@ -19,10 +19,11 @@ Relationship intelligence agent for the GiveCampus HackMIT challenge. Core quest
 - The LLM never sees the raw dataset. It receives structured evidence only. Every LLM feature has a deterministic fallback and a mockable client.
 - No opaque numeric relationship score in the UI. Show the evidence that caused a recommendation.
 - Explicit contact restrictions (do-not-solicit, do-not-call, deceased) override every recommendation.
+- Contact-restriction flags are a current snapshot: past outreach may appear to conflict with them. Treat that as a data caveat, not evidence of a violation (Appendix C item 8).
 
 ## Stack (PRD section 14)
 
-FastAPI, pandas or SQLite (built with `dataset/load_sqlite.py`), NetworkX, React/Next.js, Cytoscape or D3, OpenAI.
+FastAPI, pandas or SQLite (built with `load_sqlite.py`), NetworkX, React/Next.js, Cytoscape or D3, OpenAI.
 
 ## Workflow
 
