@@ -26,3 +26,13 @@ def staff():
 @pytest.fixture(scope="session")
 def opportunities():
     return load_table("opportunities")
+
+
+@pytest.fixture(scope="session")
+def degrees():
+    return load_table("degrees")
+
+
+@pytest.fixture(scope="session")
+def activities():
+    return load_table("activities")

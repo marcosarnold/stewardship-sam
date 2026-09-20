@@ -1,11 +1,12 @@
 """FastAPI app exposing the Today queue."""
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import TODAY_QUEUE_MAX_ITEMS
 from app.db import load_table
 from app.followups import build_followups
+from app.relationships import build_relationship
 from app.today import build_today_queue, summarize_held_back
 
 app = FastAPI(title="Stewardship Sam API")
@@ -53,3 +54,25 @@ def get_followups(include_resolved: bool = False):
     staff = load_table("staff")
 
     return build_followups(constituents, interactions, staff, include_resolved)
+
+
+@app.get("/api/relationships/{entity_id}")
+def get_relationship(entity_id: int):
+    constituents = load_table("constituents")
+    gifts = load_table("gifts")
+    interactions = load_table("interactions")
+    staff = load_table("staff")
+    opportunities = load_table("opportunities")
+    degrees = load_table("degrees")
+    activities = load_table("activities")
+
+    relationship = build_relationship(
+        entity_id, constituents, gifts, interactions, staff, opportunities, degrees, activities
+    )
+    if relationship is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"No relationship record for id {entity_id}: unknown, not an individual, or deceased.",
+        )
+
+    return relationship
